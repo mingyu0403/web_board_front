@@ -1,0 +1,19 @@
+.board-list-item {
+  display: table;
+  border-bottom: 1px solid silver;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #efefef;
+  }
+
+  > div {
+    display: table-cell;
+    width: 100px;
+    padding: 5px 10px;
+
+    &:first-child {
+      width: 200px;
+    }
+  }
+}
