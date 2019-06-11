@@ -73,6 +73,40 @@ class PostStore {
             return false;
         }
     }
+
+
+    @action deletePost = async (postid) => {
+        try {
+            let response = await axios({
+                url: `http://localhost:8080/deletePost/${postid}`,
+                method: 'delete',
+                timeout: 3000
+            });
+            return (response.status === 200);
+        } catch (e) {
+            alert(e.toLocaleString());
+            return false;
+        }
+    }
+
+
+    @action editPost = async (post) => {
+        try {
+            let response = await axios({
+                url: `http://localhost:8080/editPost`,
+                method: 'put',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                timeout: 3000,
+                data: JSON.stringify(post)
+            });
+            return (response.status === 200);
+        } catch (e) {
+            alert(e.toLocaleString());
+            return false;
+        }
+    }
 }
 
 export default PostStore.getInstance();

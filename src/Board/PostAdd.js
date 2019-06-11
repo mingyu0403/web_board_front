@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {inject, observer} from "mobx-react";
 import {Redirect} from 'react-router-dom';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 @inject('stores')
@@ -10,12 +12,26 @@ class PostAdd extends Component {
         title: '',
         content: '',
         userId: 1,
-        goToList: false
+        goToList: false,
+        goToPost: false
     };
 
+    constructor(props) {
+        super(props);
+        if (this.props.postid && this.props.stores.PostStore.item)
+            this.state = {
+                ...this.state,
+                title: this.props.stores.PostStore.item.title,
+                content: this.props.stores.PostStore.item.content,
+                id: this.props.stores.PostStore.item.id,
+            }
+    }
     render() {
         if(this.state.goToList)
             return <Redirect to={'/board'}/>;
+        if(this.state.goToPost)
+            return <Redirect to={`/board/view/${this.props.postid}`}/>;
+
         return (
             <div>
                 <div>
@@ -24,7 +40,10 @@ class PostAdd extends Component {
                 <div>
                     내용
                     <div>
-                        <textarea value={this.state.content} onChange={this.updateContent}/>
+                        <CKEditor editor={ClassicEditor}
+                                  data={this.state.content}
+                                  onChange={this.updateContent}
+                        />
                     </div>
                     <div>
                         <button onClick={this.addNewPost}>확인</button>
@@ -35,16 +54,20 @@ class PostAdd extends Component {
     }
 
     addNewPost = async () => {
-        // 공백 체크 코드
-        if(await this.props.stores.PostStore.addNewPost(this.state)) {
+        if(this.props.postid && await this.props.stores.PostStore.editPost(this.state)){
             // 다시 리스트를 가져오게 함. (갱신)
             await this.props.stores.PostStore.fetchItems();
             this.setState({
                 ...this.state,
-                goToList: true
+                goToPost: true
             })
+        } else if (await this.props.stores.PostStore.addNewPost(this.state)) {
+            await this.props.stores.PostStore.fetchItems();
+            this.setState({
+                ...this.state,
+                goToList: true
+            });
         }
-
     }
 
     updateTitle = event => {
@@ -53,10 +76,10 @@ class PostAdd extends Component {
             title: event.target.value
         });
     };
-    updateContent = event => {
+    updateContent = (event, editor) => {
         this.setState({
             ...this.state,
-            content: event.target.value
+            content: editor.getData()
         });
     };
 }

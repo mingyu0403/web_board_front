@@ -22,7 +22,11 @@ class Board extends Component {
         if(this.props.match && this.props.match.params.command === 'add')
             return  <PostAdd />
 
-        let p = this.props.stores.PostStore;
+        if(this.props.match && this.props.match.params.command === 'edit')
+            return <PostAdd postid={this.props.match.params.postid} />;
+
+
+            let p = this.props.stores.PostStore;
         return (
             <div>
                 {p.items && <BoardList items={p.items}/>}
