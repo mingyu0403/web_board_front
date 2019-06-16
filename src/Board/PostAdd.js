@@ -4,14 +4,13 @@ import {Redirect} from 'react-router-dom';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-
 @inject('stores')
 @observer
 class PostAdd extends Component {
     state = {
         title: '',
         content: '',
-        userId: 1,
+        userId: this.props.stores.ProfileStore.user.id,
         goToList: false,
         goToPost: false
     };
@@ -54,7 +53,12 @@ class PostAdd extends Component {
     }
 
     addNewPost = async () => {
+        if(!(this.state.userId === this.props.stores.ProfileStore.user.id)) return;
+
+        if(window.confirm('완료되었습니까?') === false) return;
+
         if(this.props.postid && await this.props.stores.PostStore.editPost(this.state)){
+
             // 다시 리스트를 가져오게 함. (갱신)
             await this.props.stores.PostStore.fetchItems();
             this.setState({

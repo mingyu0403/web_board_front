@@ -24,6 +24,7 @@ class PostView extends Component {
         let p = this.props.stores.PostStore;
         if(! p.item)
             return <div />;
+        let user = this.props.stores.ProfileStore.user;
         return (
             <div>
                 <div>
@@ -40,8 +41,8 @@ class PostView extends Component {
                 </div>
                 <div>
                     <Link to='/board'>목록</Link>
-                    <button onClick={this.deletePost}>삭제</button>
-                    <button onClick={this.editPost}>수정</button>
+                    { user && user.id == p.item.userId && <button onClick={this.deletePost}>삭제</button>}
+                    { user && user.id == p.item.userId && <button onClick={this.editPost}>수정</button> }
                 </div>
             </div>
         );
@@ -53,6 +54,8 @@ class PostView extends Component {
         if(window.confirm('삭제하시겠습니까?') === false) return;
 
         let id = this.props.postid;
+        if(!(this.props.stores.PostStore.item.userId === this.props.stores.ProfileStore.user.id)) return;
+
         if(await this.props.stores.PostStore.deletePost(id)){
             await this.props.stores.PostStore.fetchItems();
             this.setState({

@@ -7,9 +7,6 @@ const BoardList = (props) => {
     return (
         <div>
             {props.items.map((item, i) => <BoardListItem key={i} post={item} />)}
-            <div>
-                <Link to='board/add'>새 글 쓰기</Link>
-            </div>
         </div>
     );
 };

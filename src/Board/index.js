@@ -6,6 +6,7 @@ import './Board.scss';
 
 import PostView from "./PostView";
 import PostAdd from "./PostAdd";
+import {Link} from "react-router-dom";
 
 @inject('stores')
 @observer
@@ -26,10 +27,16 @@ class Board extends Component {
             return <PostAdd postid={this.props.match.params.postid} />;
 
 
-            let p = this.props.stores.PostStore;
+        let p = this.props.stores.PostStore;
+        let user = this.props.stores.ProfileStore.user;
         return (
-            <div>
-                {p.items && <BoardList items={p.items}/>}
+            <div id='board-page'>
+                <div>
+                    {p.items && <BoardList items={p.items}/>}
+                </div>
+                <div>
+                    { user && <Link to='board/add'>새 글 쓰기</Link> }
+                </div>
             </div>
         );
     }

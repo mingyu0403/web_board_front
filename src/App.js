@@ -3,14 +3,15 @@ import {BrowserRouter, Route, Link} from 'react-router-dom';
 import {Provider} from 'mobx-react';
 
 import Home from "./Home";
-import Page1 from "./Page1";
-import Page2 from "./Page2";
-import Page3 from "./Page3";
+
+import Profile from "./Profile";
+import ProfileEdit from "./Profile/ProfileEdit";
 
 import './App.scss';
 
 import Stores from "./Stores";
 import Board from "./Board";
+import Login from "./Profile/Login";
 
 function App() {
 
@@ -20,25 +21,24 @@ function App() {
             <header className='app-header'>
                 <ul className='menu-bar'>
                     <li><Link to='/'>Home</Link></li>
-                    <li><Link to='/page1'>Page 1</Link></li>
-                    <li><Link to='/page2'>Page 2</Link></li>
-                    <li><Link to='/page3'>Page 3</Link></li>
-                    <li><Link to='/board'>게시판</Link></li>
+                    {/*<li><Link to='/login'>로그인</Link></li>*/}
+                    <li><Link to='/profile'>프로필</Link></li>
                 </ul>
             </header>
 
             <section className='app-body'>
                 <Route path='/' exact component={Home} />
-                <Route path='/page1' component={Page1} />
-                <Route path='/page2' component={Page2} />
-                <Route path='/page3' component={Page3} />
+                {/*<Route path='/login' component={Login} />*/}
+                <Route path='/profile' exact component={Profile} />
+                <Route path='/profile/edit' component={ProfileEdit} />
                 <Route path='/board/:command?/:postid?' exact component={Board} />
                 {/*<Route path='/board' exact component={Board} />*/}
                 {/*<Route path='/board/view/:postid' exact component={Board} />*/}
                 {/*<Route path='/board/add/' exact component={Board} />*/}
+
             </section>
 
-            <aside className='nav-aside'>
+            <aside>
 
             </aside>
         </BrowserRouter>
